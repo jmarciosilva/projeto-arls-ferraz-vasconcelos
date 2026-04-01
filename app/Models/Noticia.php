@@ -15,7 +15,8 @@ class Noticia extends Model
         'foto_capa',
         'publicado',
         'publicado_em',
-        'user_id'
+        'user_id',
+        'categoria_id',
     ];
     protected $casts = [
         'publicado'    => 'boolean',
@@ -31,5 +32,15 @@ class Noticia extends Model
     public function autor()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * ============================================================
+     * RELACIONAMENTO COM CATEGORIA
+     * ============================================================
+     */
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
     }
 }

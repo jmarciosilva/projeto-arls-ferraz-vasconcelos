@@ -1,308 +1,580 @@
+{{--
+    ============================================================
+    View: landing/noticias.blade.php
+    Descrição: Página pública de notícias — layout estilo portal G1
+    Resolve conflito de CSS: usa grid inline para evitar
+    sobrescrita do style.css do template original
+    ============================================================
+--}}
 @include('landing.layouts.header')
 
 <body>
+
     @include('landing.components.navbar')
-    <section>
-        <!-- bradcam_area_start -->
-        <div class="bradcam_area breadcam_bg_sobre_nos">
-            <br>
-            <h3>A . ' . R . ' . L . ' . S . ' .</h3>
-            <h3>Ferraz de Vasconcelos</h3>
-        </div>
-        <!-- bradcam_area_end -->
 
+    {{-- Banner da seção --}}
+    <div class="bradcam_area breadcam_bg_sobre_nos">
+        <h3>Notícias</h3>
+    </div>
 
+    {{-- ════════════════════════════════════════════════════════
+     ESTILOS EXCLUSIVOS DESTA PÁGINA
+     Prefixados com .pg-noticias para evitar conflitos
+     ════════════════════════════════════════════════════════ --}}
+    <style>
+        /* ── Reset do template dentro desta página ──────────── */
+        .pg-noticias {
+            background: #f4f5f7;
+            padding: 2.5rem 0 4rem;
+        }
 
-        <!-- about_area_start -->
-        <div class="about_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12">
-                        <h3 class="mb-4">36° Aniversário da Augusta e Respeitável Loja Simbólica Ferraz de Vasconcelos N° 2516 </h3>
-                        <div class="about_thumb d-flex">
-                            <div class="img_1 mb-4">
-                                <img src="{{ asset('img/niver36/niver_02.jpg') }}"
-                                    alt="Logo da Loja de Ferraz de Vasconcelos">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-12 col-lg-12">
-                        <div class="about_thumb d-flex">
-                            <div class="img_1 mb-4">
-                                <img src="{{ asset('img/niver36/niver_20.jpg') }}"
-                                    alt="Logo da Loja de Ferraz de Vasconcelos">
-                            </div>
-                        </div>
-                    </div>
+        /* ── Container centralizado ─────────────────────────── */
+        .pg-noticias .pn-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ── Grid flex — substitui Bootstrap .row/.col ───────── */
+        .pn-row {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin: 0 -12px;
+        }
+
+        .pn-col-8 {
+            width: 66.6667%;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .pn-col-4 {
+            width: 33.3333%;
+            padding: 0 12px;
+            box-sizing: border-box;
+        }
+
+        .pn-col-4-card {
+            width: 33.3333%;
+            padding: 0 12px 28px;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+
+            .pn-col-8,
+            .pn-col-4,
+            .pn-col-4-card {
+                width: 100%;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 991px) {
+            .pn-col-4-card {
+                width: 50%;
+            }
+        }
+
+        /* ── Cabeçalho editorial de seção ───────────────────── */
+        .pn-secao-titulo {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1a3a5c;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            border-left: 4px solid #c9a84c;
+            padding-left: .6rem;
+            margin-bottom: 1.25rem;
+        }
+
+        /* ── Destaque principal ──────────────────────────────── */
+        .pn-destaque-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pn-destaque-link:hover .pn-destaque-img {
+            transform: scale(1.03);
+        }
+
+        .pn-destaque-img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+            transition: transform .35s ease;
+        }
+
+        .pn-destaque-sem-foto {
+            width: 100%;
+            height: 420px;
+            background: linear-gradient(135deg, #1a3a5c, #2c5f8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pn-destaque-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, .85) 0%,
+                    rgba(0, 0, 0, .5) 50%,
+                    transparent 100%);
+        }
+
+        .pn-destaque-categoria {
+            display: inline-block;
+            background: #c9a84c;
+            color: #fff;
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            padding: .25em .65em;
+            border-radius: 3px;
+            margin-bottom: .6rem;
+        }
+
+        .pn-destaque-titulo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.25;
+            margin: 0 0 .5rem;
+        }
+
+        .pn-destaque-resumo {
+            font-size: .95rem;
+            color: rgba(255, 255, 255, .8);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .pn-destaque-data {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .6);
+            margin-top: .5rem;
+            display: block;
+        }
+
+        /* ── Sidebar de últimas notícias ─────────────────────── */
+        .pn-sidebar {
+            background: #fff;
+            border-radius: 6px;
+            padding: 1.25rem;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .pn-sidebar-item {
+            display: flex;
+            gap: .75rem;
+            padding: .85rem 0;
+            border-bottom: 1px solid #eee;
+            text-decoration: none;
+            color: inherit;
+            transition: opacity .18s;
+        }
+
+        .pn-sidebar-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .pn-sidebar-item:hover {
+            opacity: .75;
+        }
+
+        .pn-sidebar-thumb {
+            width: 88px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .pn-sidebar-sem-foto {
+            width: 88px;
+            height: 64px;
+            background: #e9ecef;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.4rem;
+            color: #aaa;
+        }
+
+        .pn-sidebar-titulo {
+            font-size: .88rem;
+            font-weight: 700;
+            line-height: 1.35;
+            color: #1a1a2e;
+            margin: 0 0 .3rem;
+        }
+
+        .pn-sidebar-data {
+            font-size: .76rem;
+            color: #999;
+        }
+
+        /* ── Separador de seções ─────────────────────────────── */
+        .pn-divider {
+            border: none;
+            border-top: 2px solid #e9ecef;
+            margin: 2.5rem 0 2rem;
+        }
+
+        /* ── Card de notícia ─────────────────────────────────── */
+        .pn-card {
+            background: #fff;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .07);
+            display: flex;
+            flex-direction: column;
+            transition: transform .22s, box-shadow .22s;
+            border-top: 3px solid #1a3a5c;
+        }
+
+        .pn-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .12);
+        }
+
+        .pn-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .pn-card-sem-foto {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a3a5c, #2c5f8a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: rgba(255, 255, 255, .3);
+        }
+
+        .pn-card-body {
+            padding: 1.1rem 1.1rem 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pn-card-categoria {
+            font-size: .72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: #c9a84c;
+            margin-bottom: .4rem;
+        }
+
+        .pn-card-titulo {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1a1a2e;
+            line-height: 1.4;
+            margin: 0 0 .6rem;
+            flex: 1;
+        }
+
+        .pn-card-resumo {
+            font-size: .88rem;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: .9rem;
+        }
+
+        .pn-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .pn-card-data {
+            font-size: .78rem;
+            color: #aaa;
+        }
+
+        .pn-card-link {
+            font-size: .85rem;
+            font-weight: 700;
+            color: #1a3a5c;
+            text-decoration: none;
+            border-bottom: 1.5px solid #c9a84c;
+            padding-bottom: 1px;
+            transition: color .18s;
+        }
+
+        .pn-card-link:hover {
+            color: #c9a84c;
+        }
+
+        /* ── Estado vazio ────────────────────────────────────── */
+        .pn-vazio {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #aaa;
+        }
+
+        .pn-vazio-icone {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: .75rem;
+        }
+
+        /* ── Paginação estilo portal ─────────────────────────── */
+        .pn-paginacao {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .pn-paginacao .pagination {
+            gap: .25rem;
+        }
+
+        .pn-paginacao .page-link {
+            color: #1a3a5c;
+            border-color: #dee2e6;
+            border-radius: 4px !important;
+            padding: .5rem .85rem;
+            font-size: .92rem;
+        }
+
+        .pn-paginacao .page-item.active .page-link {
+            background: #1a3a5c;
+            border-color: #1a3a5c;
+            color: #fff;
+        }
+
+        .pn-paginacao .page-link:hover {
+            background: #e8f0fe;
+            color: #1a3a5c;
+        }
+    </style>
+
+    <section class="pg-noticias">
+        <div class="pn-container">
+
+            {{-- ════════════════════════════════════════════════
+             BLOCO DE DESTAQUE
+             Notícia principal + sidebar de últimas
+             ════════════════════════════════════════════════ --}}
+            @if ($destaque)
+
+                <div class="pn-secao-titulo">
+                    &#9670; Em Destaque
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="about_info">
-                            <div class="section_title mb-20px">
-                                <span>36 Anos da ARLS Ferraz de Vasconcelos - 2516</span>
-                                <h3>36 anos da Fundação da Augusta e Respeitável Loja Simbólica Ferraz de Vasconcelos N°
-                                    2516 </h3>
+                {{-- Grid: 2/3 destaque + 1/3 sidebar --}}
+                <div class="pn-row" style="margin-bottom: 0">
+
+                    {{-- Notícia destaque principal --}}
+                    <div class="pn-col-8">
+                        <a href="/noticias/{{ $destaque->slug }}" class="pn-destaque-link">
+
+                            {{-- Imagem ou fallback --}}
+                            @if ($destaque->foto_capa)
+                                <img src="{{ asset('storage/' . $destaque->foto_capa) }}" class="pn-destaque-img"
+                                    alt="{{ $destaque->titulo }}">
+                            @else
+                                <div class="pn-destaque-sem-foto">
+                                    <span style="font-size:4rem;color:rgba(255,255,255,.15)">&#9670;</span>
+                                </div>
+                            @endif
+
+                            {{-- Sobreposição de texto --}}
+                            <div class="pn-destaque-overlay">
+                                {{-- Categoria --}}
+                                @if ($destaque->categoria)
+                                    <span class="pn-destaque-categoria">
+                                        {{ $destaque->categoria->nome }}
+                                    </span>
+                                @endif
+
+                                {{-- Título --}}
+                                <h2 class="pn-destaque-titulo">
+                                    {{ $destaque->titulo }}
+                                </h2>
+
+                                {{-- Resumo --}}
+                                @if ($destaque->resumo)
+                                    <p class="pn-destaque-resumo">
+                                        {{ \Illuminate\Support\Str::limit($destaque->resumo, 130) }}
+                                    </p>
+                                @else
+                                    <p class="pn-destaque-resumo">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($destaque->conteudo), 130) }}
+                                    </p>
+                                @endif
+
+                                {{-- Data --}}
+                                @if ($destaque->publicado_em)
+                                    <span class="pn-destaque-data">
+                                        &#128197;
+                                        {{ $destaque->publicado_em->format('d/m/Y \à\s H\hi') }}
+                                    </span>
+                                @endif
                             </div>
-                            <p>É com imensa alegria e profundo orgulho que a ARLS Ferraz de Vasconcelos -
-                                nº 2516 celebra seus 36 anos de fundação, um marco de perseverança e dedicação à
-                                Maçonaria.
-                                Ao longo dessas mais de três décadas, nossa Loja tem sido um exemplo vivo dos princípios
-                                maçônicos,
-                                promovendo o aperfeiçoamento moral, intelectual e espiritual de seus membros, e
-                                impactando positivamente a comunidade ao nosso redor.
-                            </p>
-                            <div class="col-xl-12 col-lg-12">
-                                <div class="about_thumb d-flex">
-                                    <div class="img_1 mb-4">
-                                        <img src="{{ asset('img/niver36/niver_01.jpg') }}"
-                                            alt="Logo da Loja de Ferraz de Vasconcelos">
+
+                        </a>
+                    </div>
+
+                    {{-- Sidebar: últimas notícias --}}
+                    <div class="pn-col-4">
+                        <div class="pn-sidebar">
+
+                            <div class="pn-secao-titulo">
+                                &#9670; Últimas Notícias
+                            </div>
+
+                            @forelse($ultimas as $u)
+                                <a href="/noticias/{{ $u->slug }}" class="pn-sidebar-item">
+
+                                    {{-- Thumbnail --}}
+                                    @if ($u->foto_capa)
+                                        <img src="{{ asset('storage/' . $u->foto_capa) }}" class="pn-sidebar-thumb"
+                                            alt="{{ $u->titulo }}">
+                                    @else
+                                        <div class="pn-sidebar-sem-foto">&#9670;</div>
+                                    @endif
+
+                                    {{-- Texto --}}
+                                    <div>
+                                        <p class="pn-sidebar-titulo">
+                                            {{ \Illuminate\Support\Str::limit($u->titulo, 70) }}
+                                        </p>
+                                        @if ($u->publicado_em)
+                                            <span class="pn-sidebar-data">
+                                                {{ $u->publicado_em->format('d/m/Y') }}
+                                            </span>
+                                        @endif
                                     </div>
-                                </div>
-                            </div><div class="col-xl-12 col-lg-12">
-                                <div class="about_thumb d-flex">
-                                    <div class="img_1 mb-4">
-                                        <img src="{{ asset('img/niver36/niver_18.jpg') }}"
-                                            alt="Logo da Loja de Ferraz de Vasconcelos">
-                                    </div>
-                                </div>
-                            </div>
-                            <p>
-                                Cada sessão realizada, cada rito celebrado e cada ação beneficente empreendida reforçam
-                                a missão que abraçamos desde o início:
-                                construir um mundo mais justo e fraterno. Esse compromisso,
-                                firmado pelos irmãos que nos precederam e mantido por aqueles que hoje se dedicam com
-                                fervor,
-                                é o alicerce sobre o qual nossa Loja se mantém forte e vibrante.
-                            </p>
+
+                                </a>
+                            @empty
+                                <p style="color:#aaa;font-size:.9rem">Nenhuma notícia recente.</p>
+                            @endforelse
+
                         </div>
                     </div>
 
+                </div>{{-- fim pn-row destaque --}}
 
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_03.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-                        <p>
-                            Ao comemorarmos esses 36 anos, também reverenciamos os irmãos que partiram para o Oriente
-                            Eterno, cujas contribuições e exemplos continuam a nos guiar. Eles deixaram um legado
-                            inestimável, que perpetua os valores de Liberdade, Igualdade e Fraternidade em nossas ações
-                            cotidianas.
-                        </p>
+            @endif
 
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_04.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
+            {{-- Divisor entre destaque e grade --}}
+            <hr class="pn-divider">
 
-                        <p>
-
-                            A Maçonaria nos ensina que o conhecimento é uma jornada contínua, e a ARLS Ferraz de
-                            Vasconcelos tem sido um ambiente fértil para o crescimento coletivo, onde o aprendizado e o
-                            compartilhamento de saberes são incentivados. Esta troca de experiências é o que fortalece
-                            nossa irmandade e nos permite avançar, sempre buscando harmonia entre tradição e inovação.
-                        </p>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_05.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_19.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>
-                            Celebramos não apenas o passado glorioso de nossa Loja, mas também o futuro promissor que se
-                            desenha diante de nós. Que o Grande Arquiteto do Universo continue a iluminar nossos passos,
-                            inspirando-nos a prosseguir com coragem, fraternidade e a firme convicção de que, juntos,
-                            podemos continuar a transformar o mundo ao nosso redor.
-                        </p>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_06.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>
-                            Celebrar os 36 anos de fundação da ARLS Ferraz de Vasconcelos - nº 2516 é, antes de tudo,
-                            celebrar a dedicação incansável de gerações de irmãos que, ao longo dessas décadas,
-                            contribuíram para o fortalecimento da Maçonaria e da sociedade em que estamos inseridos.
-                            Esse marco não é apenas uma data simbólica, mas representa a continuidade de um ideal de
-                            fraternidade, união e busca constante pelo aperfeiçoamento moral e intelectual, que
-                            caracteriza a essência de nossa Ordem.
-                        </p>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_07.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <p>Desde sua fundação, em 1988, a ARLS Ferraz de Vasconcelos tem sido uma pedra angular na 28ª
-                            Região Administrativa, proporcionando a seus membros um ambiente propício ao crescimento
-                            pessoal e coletivo. Nossos irmãos, com dedicação e esmero, mantêm viva a chama da maçonaria,
-                            buscando diariamente colocar em prática os princípios de Liberdade, Igualdade e Fraternidade
-                            que tanto prezamos.</p>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_08.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_16.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>Cada sessão ordinária, cada grau trabalhado e cada ritual celebrado não são apenas
-                            formalidades; são momentos de profundo significado, nos quais reforçamos os ensinamentos que
-                            norteiam nossas vidas e reafirmamos nosso compromisso com a ordem e com o mundo ao nosso
-                            redor. A ARLS Ferraz de Vasconcelos tem sido um exemplo de como a maçonaria pode e deve ser
-                            um farol de luz em meio às adversidades, guiando seus membros e a sociedade para um caminho
-                            de justiça, igualdade e benevolência.</p>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_09.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_15.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <p>Além do desenvolvimento interno de seus membros, nossa Loja sempre se destacou pela atuação
-                            na comunidade, promovendo ações beneficentes e estendendo a mão aos mais necessitados. A
-                            prática da caridade, um dos pilares da maçonaria, é algo que valorizamos profundamente e que
-                            seguimos realizando com humildade e compromisso. Esse espírito altruísta fortalece nossos
-                            laços e dá sentido ao que fazemos, mostrando que a verdadeira maçonaria vai além das portas
-                            do templo.</p>
-
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_10.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <p>Ao olharmos para o futuro, nos enchemos de esperança e entusiasmo. A ARLS Ferraz de
-                            Vasconcelos segue firme, em constante evolução, mas sem perder de vista os valores e
-                            tradições que nos trouxeram até aqui. Sabemos que o caminho adiante exigirá coragem,
-                            sabedoria e união, mas estamos preparados para enfrentá-lo, confiantes de que, juntos,
-                            continuaremos a fazer a diferença tanto dentro quanto fora da Maçonaria.</p>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_11.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_17.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>O 36º aniversário de nossa Loja é um lembrete de que, apesar dos desafios e mudanças, nossa
-                            missão permanece: ser um farol de luz, sabedoria e justiça em um mundo que, mais do que
-                            nunca, necessita dos princípios que carregamos. Que possamos continuar a trilhar este
-                            caminho com a mesma determinação e compromisso que nos trouxeram até aqui.</p>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_12.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <p>Que o Grande Arquiteto do Universo continue abençoando a nossa Loja, iluminando nossos
-                            corações e mentes, e nos permitindo celebrar muitos outros aniversários com a mesma alegria
-                            e união.
-                        </p>
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_13.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-12 col-lg-12">
-                            <div class="about_thumb d-flex">
-                                <div class="img_1 mb-4">
-                                    <img src="{{ asset('img/niver36/niver_14.jpg') }}"
-                                        alt="Logo da Loja de Ferraz de Vasconcelos">
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <p></p>
-
-
+            {{-- ════════════════════════════════════════════════
+             GRADE DE NOTÍCIAS — 3 colunas
+             ════════════════════════════════════════════════ --}}
+            <div class="pn-secao-titulo">
+                &#9670; Todas as Notícias
             </div>
-        </div>
-        </div>
-        <!-- about_area_end -->
 
+            @if ($noticias->count() > 0)
+
+                <div class="pn-row">
+                    @foreach ($noticias as $n)
+                        <div class="pn-col-4-card">
+                            <div class="pn-card">
+
+                                {{-- Imagem ou fallback --}}
+                                @if ($n->foto_capa)
+                                    <a href="/noticias/{{ $n->slug }}">
+                                        <img src="{{ asset('storage/' . $n->foto_capa) }}" class="pn-card-img"
+                                            alt="{{ $n->titulo }}">
+                                    </a>
+                                @else
+                                    <a href="/noticias/{{ $n->slug }}" class="pn-card-sem-foto">
+                                        &#9670;
+                                    </a>
+                                @endif
+
+                                {{-- Corpo do card --}}
+                                <div class="pn-card-body">
+
+                                    {{-- Categoria --}}
+                                    @if ($n->categoria)
+                                        <span class="pn-card-categoria">
+                                            {{ $n->categoria->nome }}
+                                        </span>
+                                    @endif
+
+                                    {{-- Título --}}
+                                    <h3 class="pn-card-titulo">
+                                        <a href="/noticias/{{ $n->slug }}"
+                                            style="text-decoration:none;color:inherit">
+                                            {{ $n->titulo }}
+                                        </a>
+                                    </h3>
+
+                                    {{-- Resumo --}}
+                                    <p class="pn-card-resumo">
+                                        @if ($n->resumo)
+                                            {{ \Illuminate\Support\Str::limit($n->resumo, 100) }}
+                                        @else
+                                            {{ \Illuminate\Support\Str::limit(strip_tags($n->conteudo), 100) }}
+                                        @endif
+                                    </p>
+
+                                    {{-- Rodapé do card: data + link --}}
+                                    <div class="pn-card-footer">
+                                        <span class="pn-card-data">
+                                            @if ($n->publicado_em)
+                                                &#128197; {{ $n->publicado_em->format('d/m/Y') }}
+                                            @endif
+                                        </span>
+                                        <a href="/noticias/{{ $n->slug }}" class="pn-card-link">
+                                            Ler mais &rarr;
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                {{-- Estado vazio --}}
+                <div class="pn-vazio">
+                    <span class="pn-vazio-icone">&#128240;</span>
+                    <p style="font-size:1.1rem">Nenhuma notícia publicada ainda.</p>
+                </div>
+
+            @endif
+
+            {{-- Paginação --}}
+            @if ($noticias->hasPages())
+                <div class="pn-paginacao">
+                    {{ $noticias->links() }}
+                </div>
+            @endif
+
+        </div>{{-- fim pn-container --}}
     </section>
-    <!-- End Sample Area -->
-
 
     @include('landing.layouts.footer')

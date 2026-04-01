@@ -59,7 +59,7 @@
                                    </ul>
                                </div>
                                <div class="book_btn d-none d-lg-block">
-                                   <a class="popup-with-form" href="#">Área Restrita</a>
+                                   <a href="{{ route('admin.login') }}">Área Restrita</a>
                                </div>
                            </div>
                        </div>

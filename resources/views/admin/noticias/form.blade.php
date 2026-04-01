@@ -1,48 +1,145 @@
 @extends('admin.layouts.app')
+
 @section('content')
-    <h4>{{ isset($noticia) ? 'Editar Noticia' : 'Nova Noticia' }}</h4>
-    <form method="POST" action="{{ isset($noticia) ? '/admin/noticias/' . $noticia->id : '/admin/noticias' }}"
-        enctype="multipart/form-data" class="mt-3">
+    <h3 class="fw-bold mb-4" style="color:#1a3a5c">
+        <i class="bi bi-pencil-square me-2"></i>
+        {{ isset($noticia) ? 'Editar Notícia' : 'Nova Notícia' }}
+    </h3>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <strong>Corrija os erros:</strong>
+            <ul class="mb-0 mt-2">
+                @foreach ($errors->all() as $e)
+                    <li>{{ $e }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ isset($noticia) ? route('noticias.update', $noticia) : route('noticias.store') }}"
+        enctype="multipart/form-data">
+
         @csrf
         @if (isset($noticia))
             @method('PUT')
         @endif
+
         <div class="mb-3">
-            <label class="form-label">Titulo</label>
+            <label class="form-label">Título *</label>
             <input name="titulo" class="form-control" value="{{ old('titulo', $noticia->titulo ?? '') }}" required>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Resumo (opcional)</label>
+            <label class="form-label">Categoria</label>
+
+            <select name="categoria_id" class="form-select">
+                <option value="">— Sem categoria —</option>
+
+                @foreach ($categorias as $cat)
+                    <option value="{{ $cat->id }}"
+                        {{ old('categoria_id', $noticia->categoria_id ?? '') == $cat->id ? 'selected' : '' }}>
+                        {{ $cat->nome }}
+                    </option>
+                @endforeach
+
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Resumo</label>
             <textarea name="resumo" class="form-control" rows="2">{{ old('resumo', $noticia->resumo ?? '') }}</textarea>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Conteudo</label>
-            <textarea name="conteudo" id="editor" class="form-control" rows="12">{{ old('conteudo', $noticia->conteudo ?? '') }}</textarea>
+            <label class="form-label">Conteúdo *</label>
+            <textarea id="editor" name="conteudo">{{ old('conteudo', $noticia->conteudo ?? '') }}</textarea>
         </div>
+
         <div class="mb-3">
-            <label class="form-label">Foto de Capa</label>
-            @if (isset($noticia) && $noticia->foto_capa)
-                <img src="{{ asset('storage/' . $noticia->foto_capa) }}" class="d-block mb-2" style="max-height:120px">
-            @endif
-            <input name="foto_capa" type="file" class="form-control" accept="image/*">
+            <label>Foto de capa</label>
+            <input type="file" name="foto_capa" class="form-control">
         </div>
-        <div class="mb-3 form-check">
-            <input name="publicado" type="checkbox" class="form-check-input" id="pub"
+
+        <div class="form-check mb-3">
+            <input type="checkbox" name="publicado" class="form-check-input"
                 {{ old('publicado', $noticia->publicado ?? false) ? 'checked' : '' }}>
-            <label class="form-check-label" for="pub">Publicar no site</label>
+            <label class="form-check-label">Publicar no site</label>
         </div>
-        <button class="btn btn-primary">Salvar</button>
-        <a href="/admin/noticias" class="btn btn-secondary ms-2">Cancelar</a>
+
+        <button class="btn btn-lg btn-success">
+            Salvar
+        </button>
+
     </form>
-@endsection
-@push('scripts')
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js"></script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
     <script>
-        tinymce.init({
-            selector: '#editor',
-            language: 'pt_BR',
-            plugins: 'lists link image table',
-            toolbar: 'undo redo | bold italic | bullist numlist | link image | table'
+        document.addEventListener("DOMContentLoaded", function() {
+
+            class MyUploadAdapter {
+                constructor(loader) {
+                    this.loader = loader;
+                }
+
+                upload() {
+                    return this.loader.file.then(file => new Promise((resolve, reject) => {
+
+                        let data = new FormData();
+                        data.append('upload', file);
+
+                        fetch('/admin/upload-imagem', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: data
+                            })
+                            .then(response => response.json())
+                            .then(result => {
+                                resolve({
+                                    default: result.url
+                                });
+                            })
+                            .catch(error => {
+                                reject('Erro no upload');
+                            });
+
+                    }));
+                }
+
+                abort() {}
+            }
+
+            function MyCustomUploadAdapterPlugin(editor) {
+                editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                    return new MyUploadAdapter(loader);
+                };
+            }
+
+            ClassicEditor
+                .create(document.querySelector('#editor'), {
+                    extraPlugins: [MyCustomUploadAdapterPlugin],
+
+                    toolbar: [
+                        'heading',
+                        '|',
+                        'bold', 'italic', 'link',
+                        '|',
+                        'bulletedList', 'numberedList',
+                        '|',
+                        'imageUpload',
+                        '|',
+                        'undo', 'redo'
+                    ]
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
         });
     </script>
-@endpush
+@endsection

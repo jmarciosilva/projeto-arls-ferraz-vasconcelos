@@ -5,20 +5,17 @@
 
     @include('landing.components.slider')
 
-    @include('landing.components.jantar_ritualistico')
-
     @include('landing.components.features')
 
     @include('landing.components.about')
 
+    @include('landing.components.eventos')      {{-- Eventos --}}
+
+    {{-- Calendário de próximas sessões --}}
+    @include('landing.components.calendario')
+
     @include('landing.components.offers')
 
     @include('landing.components.localizacao')
-
-
-
-
-
-
 
     @include('landing.layouts.footer')
